@@ -1,58 +1,40 @@
-# MonitorSystem — System Health Monitor (Python)
+# MonitorSystem
 
-A small desktop application to monitor a Windows PC's health (CPU, RAM, disk, network, processes), detect threshold violations, log events, and show a simple multi-page GUI.
+A small desktop application to monitor a Windows PC's health, detect threshold violations, log events, and show a simple multi-page GUI.
 
 Why this exists
-- Quick local tool to observe system resource usage and get lightweight alerts when resources become constrained.
-- Built as a small, extensible Python project to experiment with monitoring, detection rules, and a responsive Tkinter UI.
+- I wanted to build a small and useful application that could help me monitor my Pc, Mostly to warn me when something goes bad such as no wifi, or high temps(Many times my Pc has Overheated because I didn't notice) I will Keep on adding more features as they come to me or that i think would be cool or useful.
 
 Key features
 - Continuous sampling of CPU, RAM and disk usage.
-- Network latency checks (ping) and basic network status.
-- Per-process CPU and memory usage, with a Memory page listing all processes sorted by RAM.
-- Simple rule-based event detector (WARNING / CRITICAL) with audible alerts.
+- Network latency checks and basic network status.
+- process CPU and memory usage, with a Memory page listing all processes sorted by RAM.
+- Simple rule based event detector with audible alerts.
 - JSONL logging of snapshots and detected events.
 - Modular code: separate monitors, detector, logger, alert manager and UI.
 
-How it works (high level)
+How it works
 - Three background monitors run in threads:
   - `SystemMonitor` samples CPU, RAM and disk.
   - `NetworkMonitor` pings a target host and measures latency.
-  - `ProcessMonitor` enumerates processes and reports CPU/memory per-process.
-- The main UI (`SystemHealthUI`) runs a Tkinter mainloop and calls an `_update_loop()` every second to merge the latest snapshots, run the `EventDetector`, log the snapshot, and update the GUI.
+  - `ProcessMonitor` enumerates processes and reports CPU memory per process.
+- The main UI runs a Tkinter mainloop and calls an `_update_loop()` every second to merge the latest snapshots, run the `EventDetector`, log the snapshot, and update the GUI.
 
 Quick start
-1. Install Python 3.8+ and pip.
-2. Install dependencies:
+Install Python 3.8+ and pip.
 
-```powershell
+Install dependencies
 pip install -r requirements.txt
-```
 
 If you don't have `requirements.txt`, install `psutil` directly:
 
-```powershell
 pip install psutil
-```
 
-3. Run the app:
-
-```powershell
+Run the app:
 python main.py
-```
-
-Project layout (important files)
-- `main.py` — application entrypoint (starts monitors and UI).
-- `monitor.py` — system-level monitor (CPU/RAM/Disk).
-- `network.py` — network ping monitor.
-- `process_monitor.py` — per-process metrics and system memory snapshot.
-- `detector.py` — rule-based event detection and status aggregation.
-- `logger.py` — JSONL logging of snapshots and events.
-- `alert.py` — audible alert manager.
-- `ui.py` — Tkinter multi-page UI (Dashboard + Memory page).
 
 Logs
-- By default logs are written to `system_health_logs.jsonl` in the app folder (one JSON object per line). The logger stores both raw snapshot data and detected events.
+- By default logs are written to `system_health_logs.jsonl` in the app folder. The logger stores both raw snapshot data and detected events.
 
 Extending the project
 - Add more detectors in `detector.py` (e.g., I/O, temperature metrics).
@@ -60,8 +42,5 @@ Extending the project
 - Add persistence, remote reporting, or a web dashboard for centralized monitoring.
 
 Notes and limitations
-- Designed as a local desktop utility; not intended as an enterprise-grade monitoring solution.
-- CPU temperature and some process details may be platform-dependent or require elevated privileges.
-
-License & author
-- This repository is a personal/project prototype. Check the repo for license details or add one if you intend to publish.
+- Designed as a local desktop utility not intended as an enterprise grade monitoring solution.
+- CPU temperature and some process details may be platformdependent or require elevated privileges.
